@@ -1,4 +1,5 @@
 using Microsoft.OpenApi.Models;
+using MLBooks.Api;
 using MLBooks.Application;
 using MLBooks.Infrastructure;
 
@@ -27,10 +28,10 @@ app.MapGet("books", async (IBookService services, CancellationToken cancellation
     await services.GetAllAsync(cancellationToken));
 
 app.MapPost("books", async (BookRequest request, IBookService services, CancellationToken cancellationToken) =>
-    await services.AddAsync(request, cancellationToken));
+    await services.AddAsync(request, cancellationToken)).AddEndpointFilter<ValidationFilter>();
 
 app.MapPut("books/{id}", async (Guid id, BookRequest request, IBookService services, CancellationToken cancellationToken) =>
-    await services.EditAsync(id, request, cancellationToken));
+    await services.EditAsync(id, request, cancellationToken)).AddEndpointFilter<ValidationFilter>();
 
 app.MapDelete("books{id}", async (Guid id, IBookService services, CancellationToken cancellationToken) =>
     await services.DeleteAsync(id, cancellationToken));
